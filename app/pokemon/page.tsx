@@ -1,30 +1,20 @@
-import { GetServerSideProps, InferGetServerSidePropsType } from "next"
+import { GetServerSideProps, InferGetServerSidePropsType, Metadata } from "next"
+import { Suspense } from "react"
+import { getPokemons } from "../api";
+import PokemonList from "../pokemon-list";
 
-type Pokemon = {
-  name: string
-  uri: string
+export const metadata: Metadata = {
+  title: "Pokemon List",
 }
 
-export const getServerSideProps: GetServerSideProps<{ pokemons: Pokemon[] }> = async () => {
-  const res = await fetch("https://pokeapi.co/api/v2/pokemon")
-  const pokemons = await res.json()
+export default function Page() {
+  const pokemons = getPokemons();
 
-  return {
-    props: {
-      pokemons
-    }
-  }
-}
-
-export default function PokemonList({ pokemons }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
-    <div>
-      {pokemons.map((pokemon, index) => {
-        return (
-          <div key={`${pokemon}-${index}`}>
-            <span>{pokemon.name}</span>
-          </div>);
-      })}
-    </div>
+    <>
+      <Suspense fallback={<div>Loading...</div>}>
+        <PokemonList ></PokemonList>
+      </Suspense>
+    </>
   )
 }
