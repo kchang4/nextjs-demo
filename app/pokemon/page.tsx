@@ -1,15 +1,11 @@
-import { NextPage } from "next"
+import { GetServerSideProps, InferGetServerSidePropsType } from "next"
 
-interface Pokemon {
-  name: string;
-  uri: string;
+type Pokemon = {
+  name: string
+  uri: string
 }
 
-interface PokemonListProps {
-  pokemons: Pokemon[];
-}
-
-export async function getServerSideProps() {
+export const getServerSideProps: GetServerSideProps<{ pokemons: Pokemon[] }> = async () => {
   const res = await fetch("https://pokeapi.co/api/v2/pokemon")
   const pokemons = await res.json()
 
@@ -20,7 +16,7 @@ export async function getServerSideProps() {
   }
 }
 
-const PokemonList: NextPage<PokemonListProps> = ({ pokemons }) => {
+export default function PokemonList({ pokemons }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <div>
       {pokemons.map((pokemon, index) => {
@@ -32,5 +28,3 @@ const PokemonList: NextPage<PokemonListProps> = ({ pokemons }) => {
     </div>
   )
 }
-
-export default PokemonList;
