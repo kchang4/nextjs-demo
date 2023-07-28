@@ -3,6 +3,7 @@
 import { Pokemon, getPokemon } from "../../api";
 import { useEffect, useState } from "react";
 import PokemonDetail from "@/app/pokemon-detail";
+import { Box, Typography } from "@mui/material";
 
 export default function ClientPokemonDetail({ params }: { params: { id: string } }) {
   const [pokemon, setPokemon] = useState<Pokemon | null>(null);
@@ -24,9 +25,9 @@ export default function ClientPokemonDetail({ params }: { params: { id: string }
   }, [params.id]);
 
   if (loading) {
-    return <div style={{ textAlign: "center" }}>Loading...</div>
+    return <Box style={{ textAlign: "center" }}><Typography variant="h4">Loading...</Typography></Box>;
   } else if (!pokemon) {
-    return <div style={{ textAlign: "center" }}>No pokemon found</div>
+    return <Box style={{ textAlign: "center" }}><Typography variant="h4">No pokemon found</Typography></Box>;
   }
 
   return (

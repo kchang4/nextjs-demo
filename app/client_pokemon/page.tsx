@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react"
 import { PokemonLite, getPokemons } from "../api";
-import Link from "next/link";
+import { Box, Typography } from "@mui/material";
+import PokemonList from "../pokemon-list";
 
 export default function ClientPokemonList() {
   const [pokemons, setPokemons] = useState<PokemonLite[]>([]);
@@ -24,19 +25,10 @@ export default function ClientPokemonList() {
   }, []);
 
   if (loading) {
-    return <div style={{ textAlign: "center" }}>Loading...</div>
+    return <Box style={{ textAlign: "center" }}><Typography variant="h4">Loading...</Typography></Box>;
+  } else if (!pokemons.length) {
+    return <Box style={{ textAlign: "center" }}><Typography variant="h4">No Pokemons</Typography></Box>;
   }
 
-  return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-      <h1>Client Pokemon List</h1>
-      <br />
-      {pokemons.map((pokemon, index) => {
-        const url = pokemon.url.split("/");
-        const id = url[url.length - 2];
-
-        return <ul key={`${pokemon.name}-${index}`}><Link href={`/client_pokemon/${id}`}>{pokemon.name}</Link></ul>
-      })}
-    </div>
-  )
+  return <PokemonList pokemons={pokemons} isClient={true} />
 }

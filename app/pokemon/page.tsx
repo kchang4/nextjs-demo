@@ -1,27 +1,18 @@
 import { Metadata } from "next"
 import { getPokemons } from "../api";
-import Link from "next/link";
+import PokemonList from "../pokemon-list";
+import { Box, Typography } from "@mui/material";
 
 export const metadata: Metadata = {
   title: "Pokemon List",
 }
 
-export default async function PokemonList() {
+export default async function PokemonListPage() {
   const pokemons = await getPokemons();
 
   if (!pokemons.length) {
-    return <h1>No Pokemons</h1>
+    return <Box style={{ textAlign: "center" }}><Typography variant="h4">No Pokemons</Typography></Box>;
   }
 
-  return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-      <h1>Pokemon List</h1>
-      <br />
-      {pokemons.map((pokemon, index) => {
-        const url = pokemon.url.split("/");
-        const id = url[url.length - 2];
-        return <ul key={`${pokemon.name}-${index}`}><Link href={`/pokemon/${id}`}>{pokemon.name}</Link></ul>
-      })}
-    </div>
-  )
+  return <PokemonList pokemons={pokemons} isClient={false} />
 }
