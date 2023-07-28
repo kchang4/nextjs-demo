@@ -1,8 +1,15 @@
-import Link from "next/link";
+import { getPokemon } from "@/app/api";
+import PokemonDetail from "@/app/pokemon-detail";
 
-export default function PokemonPage({ params }: { params: { id: string } }) {
-  return (<div>
-    <Link href={"/pokemon"}>Back to Pokemon list</Link>
-    <span>My Pokemon</span>
-  </div>)
+export default async function PokemonDetailPage({ params }: { params: { id: string } }) {
+
+  const pokemon = await getPokemon(params.id);
+
+  if (!pokemon) {
+    return <div>No pokemon found</div>
+  }
+
+  return (
+    <PokemonDetail pokemon={pokemon} isClient={false} />
+  );
 }
